@@ -1,6 +1,7 @@
 package ru.mts.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Интерфейс, представляющий некое животное. Содержит методы, которые могут быть полезны при работе с
@@ -31,4 +32,10 @@ public interface Animal {
      * @return Характер животного.
      */
     String getCharacter();
+
+    /**
+     * Метод получения дня рождения животного в формате dd-MM-yyyy.
+     * @return Дата рождения животного.
+     */
+    LocalDate getBirthDate();
 }
