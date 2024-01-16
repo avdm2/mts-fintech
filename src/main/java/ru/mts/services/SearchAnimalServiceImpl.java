@@ -16,9 +16,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
     }
 
     @Override
-    public String[] findLeapYearNames() throws IllegalArgumentException {
-        checkData();
-
+    public String[] findLeapYearNames() {
         String[] result = new String[data.length];
         for (int i = 0; i < data.length; ++i) {
             AbstractAnimal currentAnimal = data[i];
@@ -31,9 +29,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
     }
 
     @Override
-    public AbstractAnimal[] findOlderAnimal(int n) throws IllegalArgumentException {
-        checkData();
-
+    public AbstractAnimal[] findOlderAnimal(int n) {
         AbstractAnimal[] result = new AbstractAnimal[data.length];
         for (int i = 0; i < data.length; ++i) {
             AbstractAnimal currentAnimal = data[i];
@@ -47,9 +43,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
     }
 
     @Override
-    public void findDuplicate() throws IllegalArgumentException {
-        checkData();
-
+    public void findDuplicate() {
         int duplicates = 0;
         for (int i = 0; i < data.length - 1; ++i) {
             AbstractAnimal first = data[i];
@@ -66,13 +60,6 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
 
         if (duplicates == 0) {
             System.out.println("No duplicates.");
-        }
-    }
-
-    @Override
-    public void checkData() throws IllegalArgumentException {
-        if (data == null || data.length == 0) {
-            throw new IllegalArgumentException("Check data for correctness.");
         }
     }
 }

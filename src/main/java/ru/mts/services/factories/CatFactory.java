@@ -16,8 +16,7 @@ public class CatFactory extends AnimalFactory {
     private final BigDecimal maxCatCost = BigDecimal.valueOf(10_000);
 
     @Override
-    public AbstractAnimal createAnimal() {
-        Random random = new Random();
+    public AbstractAnimal createAnimal(Random random) {
         int randomValue = random.nextInt(0, 1_000_000);
         LocalDate start = LocalDate.of(2010, Month.JANUARY, 1);
         LocalDate end = LocalDate.of(2023, Month.DECEMBER, 31);
