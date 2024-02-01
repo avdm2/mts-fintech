@@ -22,6 +22,7 @@ public interface SearchAnimalService {
 
     /**
      * Метод, удаляющий дубликаты животных из массива.
+     * @return Массив всех повторяющихся животных.
      */
-    void findDuplicate();
+    AbstractAnimal[] findDuplicate();
 }

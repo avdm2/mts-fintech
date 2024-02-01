@@ -6,6 +6,7 @@ import ru.mts.models.impl.Dog;
 import ru.mts.models.impl.Shark;
 import ru.mts.models.impl.Wolf;
 import ru.mts.services.CreateAnimalServiceImpl;
+import ru.mts.services.utils.AbstractAnimalTester;
 import ru.mts.services.utils.AbstractAnimalTesterImpl;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class Main {
 
     public static void main(String[] args) {
-        AbstractAnimalTesterImpl tester = new AbstractAnimalTesterImpl();
+        AbstractAnimalTester tester = new AbstractAnimalTesterImpl();
 
         AbstractAnimal[] data = new CreateAnimalServiceImpl().createAnimals(10);
         tester.test(data);

@@ -3,6 +3,7 @@ package ru.mts.services;
 import ru.mts.models.AbstractAnimal;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Сервис для работы с массивом животных.
@@ -33,7 +34,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
         AbstractAnimal[] result = new AbstractAnimal[data.length];
         for (int i = 0; i < data.length; ++i) {
             AbstractAnimal currentAnimal = data[i];
-            int age = LocalDate.ofEpochDay((LocalDate.now().toEpochDay() - currentAnimal.getBirthDate().toEpochDay())).getYear();
+            int age = Period.between(currentAnimal.getBirthDate(), LocalDate.now()).getYears();
             if (age > n) {
                 result[i] = currentAnimal;
             }
@@ -43,7 +44,8 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
     }
 
     @Override
-    public void findDuplicate() {
+    public AbstractAnimal[] findDuplicate() {
+        AbstractAnimal[] result = new AbstractAnimal[data.length];
         int duplicates = 0;
         for (int i = 0; i < data.length - 1; ++i) {
             AbstractAnimal first = data[i];
@@ -52,7 +54,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
                 AbstractAnimal second = data[j];
 
                 if (first.equals(second)) {
-                    System.out.println("Duplicate: " + first);
+                    result[duplicates] = first;
                     ++duplicates;
                 }
             }
@@ -61,5 +63,7 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
         if (duplicates == 0) {
             System.out.println("No duplicates.");
         }
+
+        return result;
     }
 }
