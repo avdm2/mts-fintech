@@ -1,7 +1,5 @@
 package ru.mts;
 
-import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,125 +18,131 @@ import ru.mts.services.SearchAnimalServiceImpl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 public class AnimalsTest {
+
+    private static final int SAMPLE_PRICE = 10_000;
 
     @Nested
     @DisplayName("Тесты корректности методов equals в созданных классах животных")
-    public class AnimalEqualsTests {
+    class AnimalEqualsTests {
         @Test
         @DisplayName("Два одинаковых кота")
         void testEqualCats() {
-            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Cat second = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Cat second = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertTrue(result);
+            assertTrue(result);
         }
 
         @Test
         @DisplayName("Два разных кота")
         void testNotEqualCats() {
-            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Cat second = new Cat("cat2", "catname2", BigDecimal.valueOf(20_000), LocalDate.now().plusDays(2));
+            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Cat second = new Cat("cat2", "catname2", BigDecimal.valueOf(SAMPLE_PRICE * 2), LocalDate.now().plusDays(2));
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
 
         @Test
         @DisplayName("Две одинаковые собаки")
         void testEqualDogs() {
-            Dog first = new Dog("dog1", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Dog second = new Dog("dog1", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Dog first = new Dog("dog1", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Dog second = new Dog("dog1", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertTrue(result);
+            assertTrue(result);
         }
 
         @Test
         @DisplayName("Две разные собаки")
         void testNotEqualDogs() {
-            Dog first = new Dog("dog1", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Dog second = new Dog("dog2", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Dog first = new Dog("dog1", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Dog second = new Dog("dog2", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
 
         @Test
         @DisplayName("Две одинаковые акулы")
         void testEqualSharks() {
-            Shark first = new Shark("shark1", "sharkname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Shark second = new Shark("shark1", "sharkname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Shark first = new Shark("shark1", "sharkname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Shark second = new Shark("shark1", "sharkname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertTrue(result);
+            assertTrue(result);
         }
 
         @Test
         @DisplayName("Две разные акулы")
         void testNotEqualSharks() {
-            Shark first = new Shark("shark1", "sharkname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Shark second = new Shark("shark2", "sharkname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Shark first = new Shark("shark1", "sharkname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Shark second = new Shark("shark2", "sharkname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
 
         @Test
         @DisplayName("Два одинаковых волка")
         void testEqualWolfs() {
-            Wolf first = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Wolf second = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Wolf first = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Wolf second = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertTrue(result);
+            assertTrue(result);
         }
 
         @Test
         @DisplayName("Два разных волка")
         void testNotEqualWolfs() {
-            Wolf first = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Wolf second = new Wolf("wolf2", "wolfname2", BigDecimal.valueOf(10_000), LocalDate.now().plusDays(2));
+            Wolf first = new Wolf("wolf1", "wolfname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Wolf second = new Wolf("wolf2", "wolfname2", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now().plusDays(2));
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
 
         @Test
         @DisplayName("Два объекта, один из которых null")
         void testNullableAnimal() {
-            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             Cat second = null;
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
 
         @Test
         @DisplayName("Два одинаковых по ссылке объекта (сравнение с самим собой)")
         void testEqualByReferenceAnimals() {
-            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             Cat second = first;
             boolean result = first.equals(second);
 
-            Assertions.assertTrue(result);
+            assertTrue(result);
         }
 
         @Test
         @DisplayName("Два объекта разного типа")
         void testDifferentClasses() {
-            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            Dog second = new Dog("dog1", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            Cat first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            Dog second = new Dog("dog1", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
             boolean result = first.equals(second);
 
-            Assertions.assertFalse(result);
+            assertFalse(result);
         }
     }
 
     @Nested
     @DisplayName("Тесты корректности методов в классе AnimalService")
-    public class AnimalServiceTests {
+    class AnimalServiceTests {
 
         @Test
         @DisplayName("Проверка метода findLeapYearNames")
@@ -170,7 +174,7 @@ public class AnimalsTest {
             when(first.getBirthDate()).thenReturn(LocalDate.of(2012, 1, 1));
 
             AbstractAnimal second = mock(AbstractAnimal.class);
-            when(second.getBirthDate()).thenReturn(LocalDate.of(2014,1, 1));
+            when(second.getBirthDate()).thenReturn(LocalDate.of(2014, 1, 1));
 
             AbstractAnimal third = mock(AbstractAnimal.class);
             when(third.getBirthDate()).thenReturn(LocalDate.of(2016, 1, 1));
@@ -190,7 +194,7 @@ public class AnimalsTest {
             when(first.getBirthDate()).thenReturn(LocalDate.of(2012, 1, 1));
 
             AbstractAnimal second = mock(AbstractAnimal.class);
-            when(second.getBirthDate()).thenReturn(LocalDate.of(2014,1, 1));
+            when(second.getBirthDate()).thenReturn(LocalDate.of(2014, 1, 1));
 
             AbstractAnimal third = mock(AbstractAnimal.class);
             when(third.getBirthDate()).thenReturn(LocalDate.of(2016, 1, 1));
@@ -209,7 +213,7 @@ public class AnimalsTest {
             when(first.getBirthDate()).thenReturn(LocalDate.of(2012, 1, 1));
 
             AbstractAnimal second = mock(AbstractAnimal.class);
-            when(second.getBirthDate()).thenReturn(LocalDate.of(2014,1, 1));
+            when(second.getBirthDate()).thenReturn(LocalDate.of(2014, 1, 1));
 
             AbstractAnimal third = mock(AbstractAnimal.class);
             when(third.getBirthDate()).thenReturn(LocalDate.of(2020, 1, 1));
@@ -224,9 +228,9 @@ public class AnimalsTest {
         @Test
         @DisplayName("Проверка метода findDuplicates")
         void testFindDuplicates() {
-            AbstractAnimal first = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            AbstractAnimal second = new Dog("dog1", "dogname1", BigDecimal.valueOf(10_000), LocalDate.now());
-            AbstractAnimal third = new Cat("cat1", "catname1", BigDecimal.valueOf(10_000), LocalDate.now());
+            AbstractAnimal first = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            AbstractAnimal second = new Dog("dog1", "dogname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
+            AbstractAnimal third = new Cat("cat1", "catname1", BigDecimal.valueOf(SAMPLE_PRICE), LocalDate.now());
 
             AbstractAnimal[] animals = {first, second, third};
             SearchAnimalService searchAnimalService = new SearchAnimalServiceImpl(animals);
