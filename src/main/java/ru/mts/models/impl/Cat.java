@@ -1,6 +1,6 @@
 package ru.mts.models.impl;
 
-import ru.mts.models.Pet;
+import ru.mts.models.templates.Pet;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

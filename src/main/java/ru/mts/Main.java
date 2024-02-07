@@ -1,32 +1,25 @@
 package ru.mts;
 
-import ru.mts.models.AbstractAnimal;
-import ru.mts.models.impl.Cat;
-import ru.mts.models.impl.Dog;
-import ru.mts.models.impl.Shark;
-import ru.mts.models.impl.Wolf;
-import ru.mts.services.CreateAnimalServiceImpl;
-import ru.mts.services.utils.AbstractAnimalTester;
-import ru.mts.services.utils.AbstractAnimalTesterImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.mts.config.ApplicationConfig;
+import ru.mts.services.AnimalsRepository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) {
-        AbstractAnimalTester tester = new AbstractAnimalTesterImpl();
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        AnimalsRepository animalsRepository = ctx.getBean(AnimalsRepository.class);
 
-        AbstractAnimal[] data = new CreateAnimalServiceImpl().createAnimals(10);
-        tester.test(data);
+        System.out.println("\nfindLeapYearNames()");
+        System.out.println(Arrays.toString(animalsRepository.findLeapYearNames()));
 
-        AbstractAnimal[] dataWithDuplicates = {
-                new Dog("breed", "name", BigDecimal.ONE, LocalDate.of(2010, 10, 10)),
-                new Wolf("breed", "name", BigDecimal.valueOf(59_000), LocalDate.now()),
-                new Cat("black and white", "cat", BigDecimal.valueOf(9_999), LocalDate.of(2015, 10, 10)),
-                new Shark("hammerhead", "shark", BigDecimal.valueOf(1_000_000), LocalDate.of(2010, 10, 10)),
-                new Dog("breed", "name", BigDecimal.ONE, LocalDate.of(2010, 10, 10))
-        };
-        tester.test(dataWithDuplicates);
+        System.out.println("\nfindOlderAnimal(5)");
+        Arrays.stream(animalsRepository.findOlderAnimal(5))
+                .forEach(System.out::println);
+
+        System.out.println("\nprintDuplicate()");
+        animalsRepository.printDuplicate();
     }
 }

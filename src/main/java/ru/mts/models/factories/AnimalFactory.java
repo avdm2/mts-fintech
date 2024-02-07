@@ -1,6 +1,6 @@
-package ru.mts.services.factories;
+package ru.mts.models.factories;
 
-import ru.mts.models.AbstractAnimal;
+import ru.mts.models.templates.AbstractAnimal;
 
 import java.util.Random;
 

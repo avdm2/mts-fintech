@@ -1,7 +1,7 @@
-package ru.mts.services.factories;
+package ru.mts.models.factories;
 
-import ru.mts.models.AbstractAnimal;
-import ru.mts.models.impl.Wolf;
+import ru.mts.models.templates.AbstractAnimal;
+import ru.mts.models.impl.Cat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,11 +9,11 @@ import java.time.Month;
 import java.util.Random;
 
 /**
- * Фабрика, создающая волков.
+ * Фабрика, создающая котов.
  */
-public class WolfFactory extends AnimalFactory {
+public class CatFactory extends AnimalFactory {
 
-    BigDecimal maxWolfCost = BigDecimal.valueOf(100_000);
+    private final BigDecimal maxCatCost = BigDecimal.valueOf(10_000);
 
     @Override
     public AbstractAnimal createAnimal(Random random) {
@@ -21,9 +21,9 @@ public class WolfFactory extends AnimalFactory {
         LocalDate start = LocalDate.of(2010, Month.JANUARY, 1);
         LocalDate end = LocalDate.of(2023, Month.DECEMBER, 31);
 
-        return new Wolf("Breed#" + randomValue % 100,
-                "Wolf#" + randomValue % 100,
-                BigDecimal.valueOf(randomValue % maxWolfCost.doubleValue() + 0.9385),
+        return new Cat("Breed#" + randomValue % 100,
+                "Cat#" + randomValue % 100,
+                BigDecimal.valueOf(randomValue % maxCatCost.doubleValue() + 0.2748),
                 LocalDate.ofEpochDay(random.nextLong(start.toEpochDay(), end.toEpochDay() + 1)));
     }
 }

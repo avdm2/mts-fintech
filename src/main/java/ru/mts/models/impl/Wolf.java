@@ -1,6 +1,6 @@
 package ru.mts.models.impl;
 
-import ru.mts.models.Predator;
+import ru.mts.models.templates.Predator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,11 +1,12 @@
 package ru.mts.services;
 
-import ru.mts.models.AbstractAnimal;
-import ru.mts.services.factories.AnimalFactory;
-import ru.mts.services.factories.CatFactory;
-import ru.mts.services.factories.DogFactory;
-import ru.mts.services.factories.SharkFactory;
-import ru.mts.services.factories.WolfFactory;
+import ru.mts.models.enums.AnimalType;
+import ru.mts.models.templates.AbstractAnimal;
+import ru.mts.models.factories.AnimalFactory;
+import ru.mts.models.factories.CatFactory;
+import ru.mts.models.factories.DogFactory;
+import ru.mts.models.factories.SharkFactory;
+import ru.mts.models.factories.WolfFactory;
 
 import java.util.Random;
 
@@ -14,7 +15,8 @@ import java.util.Random;
  */
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
-    private final static Random random = new Random();
+    private final AnimalType animalType = AnimalType.CAT;
+    private static final Random random = new Random();
 
     @Override
     public AbstractAnimal[] createAnimals(int amount) throws IllegalArgumentException {
@@ -22,13 +24,16 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             throw new IllegalArgumentException("Check data for correctness.");
         }
 
-        AnimalFactory[] factories = new AnimalFactory[] {
-                new CatFactory(), new DogFactory(), new SharkFactory(), new WolfFactory()
-        };
+        AnimalFactory factory = new CatFactory();
+        switch (animalType) {
+            case DOG -> factory = new DogFactory();
+            case SHARK -> factory = new SharkFactory();
+            case WOLF -> factory = new WolfFactory();
+        }
 
         AbstractAnimal[] array = new AbstractAnimal[amount];
         for (int i = 0; i < amount; ++i) {
-            array[i] = factories[random.nextInt(factories.length)].createAnimal(random);
+            array[i] = factory.createAnimal(random);
         }
 
         return array;

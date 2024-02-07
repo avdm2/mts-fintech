@@ -1,6 +1,6 @@
 package ru.mts.services;
 
-import ru.mts.models.AbstractAnimal;
+import ru.mts.models.templates.AbstractAnimal;
 
 /**
  * Интерфейс, представляющий собой сервис для создания животных.

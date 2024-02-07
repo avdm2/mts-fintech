@@ -1,4 +1,6 @@
-package ru.mts.models;
+package ru.mts.models.templates;
+
+import ru.mts.models.Animal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,7 +25,7 @@ public abstract class AbstractAnimal implements Animal {
      * @param character Характер животного.
      * @param birthDate Дата рождения животного.
      */
-    public AbstractAnimal(String breed, String name, BigDecimal cost, String character, LocalDate birthDate) {
+    protected AbstractAnimal(String breed, String name, BigDecimal cost, String character, LocalDate birthDate) {
         this.breed = breed;
         this.name = name;
         this.cost = cost.setScale(2, RoundingMode.HALF_EVEN);

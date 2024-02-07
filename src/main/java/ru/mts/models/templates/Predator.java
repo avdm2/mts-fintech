@@ -1,4 +1,4 @@
-package ru.mts.models;
+package ru.mts.models.templates;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public abstract class Predator extends AbstractAnimal {
      * @param cost Цена животного в магазине.
      * @param birthDate Дата рождения животного.
      */
-    public Predator(String breed, String name, BigDecimal cost, LocalDate birthDate) {
+    protected Predator(String breed, String name, BigDecimal cost, LocalDate birthDate) {
         super(breed, name, cost, "aggressive", birthDate);
     }
 }

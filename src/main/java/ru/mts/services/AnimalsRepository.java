@@ -1,11 +1,13 @@
 package ru.mts.services;
 
-import ru.mts.models.AbstractAnimal;
+import ru.mts.models.templates.AbstractAnimal;
+
+import java.util.Set;
 
 /**
  * Интерфейс, представляющий собой сервис для работы (поиска) с массивом животных.
  */
-public interface SearchAnimalService {
+public interface AnimalsRepository {
 
     /**
      * Метод, который находит всех животных, родившихся в високосный год.
@@ -15,14 +17,20 @@ public interface SearchAnimalService {
 
     /**
      * Метод, находящий всех животных, возраст которых старше N лет.
-     * @param n Число лет, по которому происходит поиск животных.
+     * @param age Число лет, по которому происходит поиск животных.
      * @return Массив животных, удовлетворяющих условиям.
      */
-    AbstractAnimal[] findOlderAnimal(int n);
+    AbstractAnimal[] findOlderAnimal(int age);
 
     /**
      * Метод, удаляющий дубликаты животных из массива.
-     * @return Массив всех повторяющихся животных.
+     * @return Сет всех повторяющихся животных.
      */
-    AbstractAnimal[] findDuplicate();
+    Set<AbstractAnimal> findDuplicate();
+
+
+    /**
+     * Метод, выводящий в стандартный поток вывода информацию о дублирующихся животных.
+     */
+    void printDuplicate();
 }

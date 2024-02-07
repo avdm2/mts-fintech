@@ -1,19 +1,30 @@
 package ru.mts.services;
 
-import ru.mts.models.AbstractAnimal;
+import ru.mts.models.templates.AbstractAnimal;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с массивом животных.
  */
-public class SearchAnimalServiceImpl implements SearchAnimalService {
+public class AnimalsRepositoryImpl implements AnimalsRepository {
 
-    private final AbstractAnimal[] data;
+    private final CreateAnimalService createAnimalService;
+    private AbstractAnimal[] data;
 
-    public SearchAnimalServiceImpl(AbstractAnimal[] data) {
-        this.data = data;
+    public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
+        this.createAnimalService = createAnimalService;
+    }
+
+    @PostConstruct
+    public void initData() {
+        data = createAnimalService.createAnimals(10);
     }
 
     @Override
@@ -44,26 +55,15 @@ public class SearchAnimalServiceImpl implements SearchAnimalService {
     }
 
     @Override
-    public AbstractAnimal[] findDuplicate() {
-        AbstractAnimal[] result = new AbstractAnimal[data.length];
-        int duplicates = 0;
-        for (int i = 0; i < data.length - 1; ++i) {
-            AbstractAnimal first = data[i];
+    public Set<AbstractAnimal> findDuplicate() {
+        Set<AbstractAnimal> set = new HashSet<>();
+        return Arrays.stream(data)
+                .filter(animal -> !set.add(animal))
+                .collect(Collectors.toSet());
+    }
 
-            for (int j = i + 1; j < data.length; ++j) {
-                AbstractAnimal second = data[j];
-
-                if (first.equals(second)) {
-                    result[duplicates] = first;
-                    ++duplicates;
-                }
-            }
-        }
-
-        if (duplicates == 0) {
-            System.out.println("No duplicates.");
-        }
-
-        return result;
+    @Override
+    public void printDuplicate() {
+        System.out.println(findDuplicate());
     }
 }

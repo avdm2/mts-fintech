@@ -1,6 +1,6 @@
-package ru.mts.services.factories;
+package ru.mts.models.factories;
 
-import ru.mts.models.AbstractAnimal;
+import ru.mts.models.templates.AbstractAnimal;
 import ru.mts.models.impl.Shark;
 
 import java.math.BigDecimal;
