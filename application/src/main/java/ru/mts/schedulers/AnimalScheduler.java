@@ -1,17 +1,22 @@
-package ru.mts;
+package ru.mts.schedulers;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.mts.config.ApplicationConfig;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import ru.mts.services.AnimalsRepository;
 
 import java.util.Arrays;
 
-public class Main {
+@Component
+public class AnimalScheduler {
 
-    public static void main(String[] args) {
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-        AnimalsRepository animalsRepository = ctx.getBean(AnimalsRepository.class);
+    AnimalsRepository animalsRepository;
 
+    public AnimalScheduler(AnimalsRepository animalsRepository) {
+        this.animalsRepository = animalsRepository;
+    }
+
+    @Scheduled(fixedRate = 60_000)
+    public void invoke() {
         System.out.println("\nfindLeapYearNames()");
         System.out.println(Arrays.toString(animalsRepository.findLeapYearNames()));
 

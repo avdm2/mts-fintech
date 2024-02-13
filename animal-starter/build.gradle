@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.4'
+}
+
+group = 'ru.mts'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter:2.7.4'
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}

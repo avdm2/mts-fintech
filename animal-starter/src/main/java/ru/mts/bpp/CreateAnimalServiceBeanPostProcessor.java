@@ -5,6 +5,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ReflectionUtils;
 import ru.mts.models.enums.AnimalType;
+import ru.mts.services.CreateAnimalService;
 
 import java.lang.reflect.Field;
 
@@ -13,7 +14,7 @@ public class CreateAnimalServiceBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (!(beanName.equals("createAnimalService"))) {
+        if (!(bean instanceof CreateAnimalService)) {
             return bean;
         }
 
@@ -32,8 +33,6 @@ public class CreateAnimalServiceBeanPostProcessor implements BeanPostProcessor {
             case 2 -> ReflectionUtils.setField(animalTypeField, bean, AnimalType.SHARK);
             case 3 -> ReflectionUtils.setField(animalTypeField, bean, AnimalType.WOLF);
         }
-
-        System.out.println("ok");
         return bean;
     }
 }

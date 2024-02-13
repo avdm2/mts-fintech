@@ -1,5 +1,6 @@
 package ru.mts.services;
 
+import org.springframework.stereotype.Repository;
 import ru.mts.models.templates.AbstractAnimal;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Сервис для работы с массивом животных.
  */
+@Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private final CreateAnimalService createAnimalService;
