@@ -2,7 +2,8 @@ package ru.mts.services;
 
 import ru.mts.models.templates.AbstractAnimal;
 
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Интерфейс, представляющий собой сервис для работы (поиска) с массивом животных.
@@ -11,22 +12,22 @@ public interface AnimalsRepository {
 
     /**
      * Метод, который находит всех животных, родившихся в високосный год.
-     * @return Массив имен искомых животных.
+     * @return Словарь искомых животных, в котором ключ вида {animalType} {animalName}, а значение - дата рождения.
      */
-    String[] findLeapYearNames();
+    Map<String, LocalDate> findLeapYearNames();
 
     /**
      * Метод, находящий всех животных, возраст которых старше N лет.
      * @param age Число лет, по которому происходит поиск животных.
-     * @return Массив животных, удовлетворяющих условиям.
+     * @return Словарь животных, удовлетворяющих условиям. Ключ - найденное животное, значение - возраст.
      */
-    AbstractAnimal[] findOlderAnimal(int age);
+    Map<AbstractAnimal, Integer> findOlderAnimal(int age);
 
     /**
      * Метод, удаляющий дубликаты животных из массива.
-     * @return Сет всех повторяющихся животных.
+     * @return Сет повторяющихся животных. Ключ - тип животного, значение - количество дубликатов.
      */
-    Set<AbstractAnimal> findDuplicate();
+    Map<String, Integer> findDuplicate();
 
 
     /**

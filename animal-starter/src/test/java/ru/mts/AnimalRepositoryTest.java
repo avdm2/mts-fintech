@@ -1,11 +1,13 @@
 package ru.mts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.mts.models.enums.AnimalType;
 import ru.mts.models.impl.Cat;
 import ru.mts.models.impl.Dog;
 import ru.mts.models.impl.Shark;
@@ -17,12 +19,15 @@ import ru.mts.services.CreateAnimalServiceImpl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 @SpringBootTest(classes = {AnimalsRepositoryImpl.class, StarterTestConfiguration.class})
 @ActiveProfiles(value = "test")
+// FIXME
 public class AnimalRepositoryTest {
 
     @Autowired
@@ -34,15 +39,19 @@ public class AnimalRepositoryTest {
     @Test
     @DisplayName("Поиск животных, родившихся в високосный год")
     void testFindLeapYearNames() {
-        AbstractAnimal[] animals = {
-                new Cat("catBreed", "catName", BigDecimal.valueOf(10_000), LocalDate.of(2020, 1, 1)),
-                new Dog("dogBreed", "dogName", BigDecimal.valueOf(20_000), LocalDate.of(2021, 1, 1)),
-                new Wolf("wolfBreed", "wolfName", BigDecimal.valueOf(30_000), LocalDate.of(2016, 1, 1))
-        };
+        List<AbstractAnimal> animals = List.of(
+                new Cat("catBreed1", "catName1", BigDecimal.valueOf(10_000), LocalDate.of(2020, 1, 1)),
+                new Cat("catBreed2", "catName2", BigDecimal.valueOf(20_000), LocalDate.of(2021, 1, 1)),
+                new Cat("catBreed3", "catName3", BigDecimal.valueOf(30_000), LocalDate.of(2016, 1, 1))
+        );
 
-        Mockito.when(createAnimalService.createAnimals(10)).thenReturn(animals);
+        Mockito.when(createAnimalService.createAnimals(10)).thenReturn(Map.of(AnimalType.CAT.getValue(), animals));
         animalsRepository.initData();
-        assertArrayEquals(new String[]{"catName", null, "wolfName"}, animalsRepository.findLeapYearNames());
+
+        var expected = Map.of("CAT catName1", LocalDate.of(2020, 1, 1),
+                "CAT catName", LocalDate.of(2016, 1, 1));
+
+        assertEquals(expected, animalsRepository.findLeapYearNames());
     }
 
     @Test

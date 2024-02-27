@@ -2,43 +2,45 @@ package ru.mts.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 @ConfigurationProperties(prefix = "animal.names")
 public class StarterConfigurationProperties {
 
-    private String[] catNames;
-    private String[] dogNames;
-    private String[] sharkNames;
-    private String[] wolfNames;
+    private List<String> catNames;
+    private List<String> dogNames;
+    private List<String> sharkNames;
+    private List<String> wolfNames;
 
-    public String[] getCatNames() {
+    public List<String> getCatNames() {
         return catNames;
     }
 
-    public String[] getDogNames() {
+    public List<String> getDogNames() {
         return dogNames;
     }
 
-    public String[] getSharkNames() {
+    public List<String> getSharkNames() {
         return sharkNames;
     }
 
-    public String[] getWolfNames() {
+    public List<String> getWolfNames() {
         return wolfNames;
     }
 
-    public void setCatNames(String[] catNames) {
+    public void setCatNames(List<String> catNames) {
         this.catNames = catNames;
     }
 
-    public void setDogNames(String[] dogNames) {
+    public void setDogNames(List<String> dogNames) {
         this.dogNames = dogNames;
     }
 
-    public void setSharkNames(String[] sharkNames) {
+    public void setSharkNames(List<String> sharkNames) {
         this.sharkNames = sharkNames;
     }
 
-    public void setWolfNames(String[] wolfNames) {
+    public void setWolfNames(List<String> wolfNames) {
         this.wolfNames = wolfNames;
     }
 }

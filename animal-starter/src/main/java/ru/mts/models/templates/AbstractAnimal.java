@@ -5,6 +5,7 @@ import ru.mts.models.Animal;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Некоторое абстрактное животное.
@@ -74,5 +75,10 @@ public abstract class AbstractAnimal implements Animal {
                 cost.equals(castedObj.cost) &&
                 character.equals(castedObj.character) &&
                 birthDate.equals(castedObj.birthDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(breed, name, cost, character, birthDate);
     }
 }

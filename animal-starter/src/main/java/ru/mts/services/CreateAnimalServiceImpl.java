@@ -9,6 +9,9 @@ import ru.mts.models.factories.DogFactory;
 import ru.mts.models.factories.SharkFactory;
 import ru.mts.models.factories.WolfFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -16,7 +19,7 @@ import java.util.Random;
  */
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
-    private final AnimalType animalType = AnimalType.CAT;
+    private AnimalType animalType = AnimalType.CAT;
     private static final Random random = new Random();
 
     private final StarterConfigurationProperties starterConfigurationProperties;
@@ -26,12 +29,22 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     }
 
     @Override
-    public AbstractAnimal[] createAnimals(int amount) throws IllegalArgumentException {
+    public AnimalType getAnimalType() {
+        return animalType;
+    }
+
+    @Override
+    public void setAnimalType(AnimalType animalType) {
+        this.animalType = animalType;
+    }
+
+    @Override
+    public Map<String, List<AbstractAnimal>> createAnimals(int amount) throws IllegalArgumentException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Check data for correctness.");
         }
 
-        String[] names = starterConfigurationProperties.getCatNames();
+        List<String> names = starterConfigurationProperties.getCatNames();
         AnimalFactory factory = new CatFactory(names);
 
         switch (animalType) {
@@ -49,11 +62,11 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
                 break;
         }
 
-        AbstractAnimal[] array = new AbstractAnimal[amount];
+        List<AbstractAnimal> animalList = new ArrayList<>();
         for (int i = 0; i < amount; ++i) {
-            array[i] = factory.createAnimal(random);
+            animalList.add(factory.createAnimal(random));
         }
 
-        return array;
+        return Map.of(animalType.getValue(), animalList);
     }
 }

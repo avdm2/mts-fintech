@@ -1,15 +1,17 @@
 package ru.mts.services;
 
 import org.springframework.stereotype.Repository;
+import ru.mts.models.enums.AnimalType;
 import ru.mts.models.templates.AbstractAnimal;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с массивом животных.
@@ -18,7 +20,9 @@ import java.util.stream.Collectors;
 public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private final CreateAnimalService createAnimalService;
-    private AbstractAnimal[] data;
+
+    private AnimalType animalType;
+    private List<AbstractAnimal> animalsList;
 
     public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
         this.createAnimalService = createAnimalService;
@@ -26,16 +30,17 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     @PostConstruct
     public void initData() {
-        data = createAnimalService.createAnimals(10);
+        Map<String, List<AbstractAnimal>> animalsData = createAnimalService.createAnimals(10);
+        animalType = createAnimalService.getAnimalType();
+        animalsList = animalsData.get(animalType.getValue());
     }
 
     @Override
-    public String[] findLeapYearNames() {
-        String[] result = new String[data.length];
-        for (int i = 0; i < data.length; ++i) {
-            AbstractAnimal currentAnimal = data[i];
+    public Map<String, LocalDate> findLeapYearNames() {
+        Map<String, LocalDate> result = new HashMap<>();
+        for (AbstractAnimal currentAnimal : animalsList) {
             if (currentAnimal.getBirthDate().isLeapYear()) {
-                result[i] = currentAnimal.getName();
+                result.put(animalType.getValue() + " " + currentAnimal.getName(), currentAnimal.getBirthDate());
             }
         }
 
@@ -43,29 +48,35 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     @Override
-    public AbstractAnimal[] findOlderAnimal(int n) {
-        AbstractAnimal[] result = new AbstractAnimal[data.length];
-        for (int i = 0; i < data.length; ++i) {
-            AbstractAnimal currentAnimal = data[i];
+    public Map<AbstractAnimal, Integer> findOlderAnimal(int n) {
+        Map<AbstractAnimal, Integer> result = new HashMap<>();
+        AbstractAnimal oldestAnimal = null;
+        int maxAge = 0;
+        for (AbstractAnimal currentAnimal : animalsList) {
             int age = Period.between(currentAnimal.getBirthDate(), LocalDate.now()).getYears();
+            if (age > maxAge) {
+                maxAge = age;
+                oldestAnimal = currentAnimal;
+            }
             if (age > n) {
-                result[i] = currentAnimal;
+                result.put(currentAnimal, age);
             }
         }
 
+        if (result.isEmpty()) {
+            result.put(oldestAnimal, maxAge);
+        }
         return result;
     }
 
     @Override
-    public Set<AbstractAnimal> findDuplicate() {
-        Set<AbstractAnimal> set = new HashSet<>();
-        return Arrays.stream(data)
-                .filter(animal -> !set.add(animal))
-                .collect(Collectors.toSet());
+    public Map<String, Integer> findDuplicate() {
+        Set<AbstractAnimal> animalSet = new HashSet<>(animalsList);
+        return Map.of(animalType.getValue(), animalsList.size() - animalSet.size());
     }
 
     @Override
     public void printDuplicate() {
-        System.out.println(findDuplicate());
+        System.out.println(animalType.getValue() + "=" + findDuplicate().get(animalType.getValue()));
     }
 }
