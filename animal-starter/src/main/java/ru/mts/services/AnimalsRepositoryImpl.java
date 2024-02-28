@@ -21,18 +21,18 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private final CreateAnimalService createAnimalService;
 
-    private AnimalType animalType;
+    private final AnimalType animalType;
     private List<AbstractAnimal> animalsList;
 
     public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
         this.createAnimalService = createAnimalService;
+        this.animalType = createAnimalService.getAnimalType();
     }
 
     @PostConstruct
     public void initData() {
         Map<String, List<AbstractAnimal>> animalsData = createAnimalService.createAnimals(10);
-        animalType = createAnimalService.getAnimalType();
-        animalsList = animalsData.get(animalType.getValue());
+        animalsList = animalsData.get(animalType.toString());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         Map<String, LocalDate> result = new HashMap<>();
         for (AbstractAnimal currentAnimal : animalsList) {
             if (currentAnimal.getBirthDate().isLeapYear()) {
-                result.put(animalType.getValue() + " " + currentAnimal.getName(), currentAnimal.getBirthDate());
+                result.put(animalType.toString() + " " + currentAnimal.getName(), currentAnimal.getBirthDate());
             }
         }
 
@@ -72,11 +72,11 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     @Override
     public Map<String, Integer> findDuplicate() {
         Set<AbstractAnimal> animalSet = new HashSet<>(animalsList);
-        return Map.of(animalType.getValue(), animalsList.size() - animalSet.size());
+        return Map.of(animalType.toString(), animalsList.size() - animalSet.size());
     }
 
     @Override
     public void printDuplicate() {
-        System.out.println(animalType.getValue() + "=" + findDuplicate().get(animalType.getValue()));
+        System.out.println(animalType.toString() + "=" + findDuplicate().get(animalType.toString()));
     }
 }

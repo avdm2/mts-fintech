@@ -14,10 +14,10 @@ import ru.mts.models.templates.AbstractAnimal;
 import ru.mts.services.CreateAnimalServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(classes = {CreateAnimalServiceImpl.class, StarterConfig.class})
 @ActiveProfiles(value = "test")
-// FIXME
 public class CreateAnimalServiceTest {
 
     @Autowired
@@ -38,8 +38,8 @@ public class CreateAnimalServiceTest {
     @DisplayName("Проверка создания животного с именем из application-test.yml")
     @Test
     void testCreationWithNameFromYml() {
-        AbstractAnimal[] animals = createAnimalService.createAnimals(1);
+        Map<String, List<AbstractAnimal>> animals = createAnimalService.createAnimals(1);
         List<String> names = List.of("catname1", "dogname1", "sharkname1", "wolfname1");
-        assertTrue(names.contains(animals[0].getName()));
+        assertTrue(names.contains(animals.get(createAnimalService.getAnimalType().toString()).get(0).getName()));
     }
 }

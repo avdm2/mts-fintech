@@ -67,6 +67,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             animalList.add(factory.createAnimal(random));
         }
 
-        return Map.of(animalType.getValue(), animalList);
+        return Map.of(animalType.toString(), animalList);
     }
 }
