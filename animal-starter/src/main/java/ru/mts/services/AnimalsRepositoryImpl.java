@@ -20,14 +20,12 @@ import java.util.stream.Collectors;
 public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private final CreateAnimalService createAnimalService;
-    private final AnimalUtilsService animalUtilsService;
 
     private final AnimalType animalType;
     private List<AbstractAnimal> animalsList;
 
-    public AnimalsRepositoryImpl(CreateAnimalService createAnimalService, AnimalUtilsService animalUtilsService) {
+    public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
         this.createAnimalService = createAnimalService;
-        this.animalUtilsService = animalUtilsService;
         this.animalType = createAnimalService.getAnimalType();
     }
 
@@ -70,8 +68,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return animalsList.stream()
                 .collect(Collectors.groupingBy(AbstractAnimal::getClass, Collectors.toList()))
                 .entrySet().stream()
-                .filter(entry -> entry.getValue().size() > 1)
-                .filter(entry -> Collections.frequency(animalsList, entry) > 1)
+                .filter(entry -> entry.getValue().size() > 1 && Collections.frequency(animalsList, entry) > 1)
                 .collect(Collectors.toMap(entry -> entry.getKey().getSimpleName(), Map.Entry::getValue));
     }
 
@@ -93,7 +90,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     @Override
     public double findAverageAge() {
         return animalsList.stream()
-                .mapToDouble(animalUtilsService::getAnimalAge)
+                .mapToDouble(this::getAnimalAge)
                 .average()
                 .orElse(-1);
     }
@@ -105,7 +102,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .average()
                 .orElse(-1);
         return animalsList.stream()
-                .filter(animal -> animalUtilsService.getAnimalAge(animal) > 5 && animal.getCost().doubleValue() > avgCost)
+                .filter(animal -> getAnimalAge(animal) > 5 && animal.getCost().doubleValue() > avgCost)
                 .sorted(Comparator.comparing(AbstractAnimal::getBirthDate))
                 .collect(Collectors.toList());
     }

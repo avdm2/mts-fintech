@@ -141,7 +141,7 @@ public class AnimalRepositoryTest {
         animalsRepository.initData();
 
         Map<String, Integer> expected = Map.of(
-                "CAT", 3
+                "Cat", 3
         );
         assertEquals(expected, animalsRepository.findDuplicate());
     }
