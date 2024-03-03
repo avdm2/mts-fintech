@@ -3,12 +3,20 @@ package ru.mts.services;
 import ru.mts.models.templates.AbstractAnimal;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Интерфейс, представляющий собой сервис для работы (поиска) с массивом животных.
  */
 public interface AnimalsRepository {
+
+    /**
+     * Метод, находящий полное количество лет животного.
+     * @param animal Животного, возраст которого следует найти.
+     * @return Возраст животного.
+     */
+    int getAnimalAge(AbstractAnimal animal);
 
     /**
      * Метод, который находит всех животных, родившихся в високосный год.
@@ -24,14 +32,32 @@ public interface AnimalsRepository {
     Map<AbstractAnimal, Integer> findOlderAnimal(int age);
 
     /**
-     * Метод, удаляющий дубликаты животных из массива.
-     * @return Сет повторяющихся животных. Ключ - тип животного, значение - количество дубликатов.
+     * Метод, находящий дубликаты животных в списке.
+     * @return Словарь, ключ которого - тип животного, а значение - список дубликатов.
      */
-    Map<String, Integer> findDuplicate();
+    Map<String, List<AbstractAnimal>> findDuplicate();
 
 
     /**
      * Метод, выводящий в стандартный поток вывода информацию о дублирующихся животных.
      */
     void printDuplicate();
+
+    /**
+     * Метод, находящий средний возраст всех животных.
+     * @return Средний возраст животных в коллекции.
+     */
+    double findAverageAge();
+
+    /**
+     * Метод, находящий животных, возраст которых больше 5 лет, а стоимость выше средней.
+     * @return Список животных согласно требованию, отсортированный по дате рождения (по возрастанию) список.
+     */
+    List<AbstractAnimal> findOldAndExpensive();
+
+    /**
+     * Метод, находящий трех самых дешевых животных.
+     * @return Список животных согласно требованию, отсортированный по именам в обратном алфавитном порядке.
+     */
+    List<AbstractAnimal> findMinCostAnimals();
 }

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: test [findAverageAge, findOldAndExpensive, findMinCostAnimals] + fix old tests
 @SpringBootTest(classes = {AnimalsRepositoryImpl.class, StarterTestConfiguration.class})
 @ActiveProfiles(value = "test")
 public class AnimalRepositoryTest {
