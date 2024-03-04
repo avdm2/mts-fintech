@@ -7,10 +7,10 @@ import ru.mts.models.templates.AbstractAnimal;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -66,10 +66,12 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     @Override
     public Map<String, List<AbstractAnimal>> findDuplicate() {
         return animalsList.stream()
-                .collect(Collectors.groupingBy(AbstractAnimal::getClass, Collectors.toList()))
+                .collect(Collectors.groupingBy(Function.identity(),
+                        Collectors.counting()))
                 .entrySet().stream()
-                .filter(entry -> entry.getValue().size() > 1 && Collections.frequency(animalsList, entry) > 1)
-                .collect(Collectors.toMap(entry -> entry.getKey().getSimpleName(), Map.Entry::getValue));
+                .filter(entry -> entry.getValue() > 1)
+                .map(entry -> Map.entry(entry.getKey().getClass().getSimpleName(), entry.getKey()))
+                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
     }
 
     @Override
