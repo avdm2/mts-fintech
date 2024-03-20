@@ -1,6 +1,7 @@
 package ru.mts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.mts.exceptions.EmptyResultException;
+import ru.mts.exceptions.IllegalAgeException;
+import ru.mts.exceptions.InvalidListSizeException;
 import ru.mts.models.enums.AnimalType;
 import ru.mts.models.impl.Cat;
 import ru.mts.models.templates.AbstractAnimal;
@@ -16,8 +20,6 @@ import ru.mts.services.CreateAnimalServiceImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +70,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createAnimalService.createAnimals(10)).thenReturn(Map.of(AnimalType.CAT.toString(), animals));
         animalsRepository.initData();
 
-        assertEquals(new HashMap<>(), animalsRepository.findLeapYearNames());
+        assertThrows(EmptyResultException.class, () -> animalsRepository.findLeapYearNames());
     }
 
     @Test
@@ -85,14 +87,7 @@ public class AnimalRepositoryTest {
     @Test
     @DisplayName("Поиск животных старше -1 года")
     void testFindOlderAnimalIncorrectYearValue() {
-        Map<AbstractAnimal, Integer> expected = Map.of(
-                new Cat("catBreed1", "abc", BigDecimal.valueOf(10_000), LocalDate.of(2024, 1, 1)), 0,
-                new Cat("catBreed2", "def", BigDecimal.valueOf(20_000), LocalDate.of(2020, 1, 1)), 4,
-                new Cat("catBreed3", "ghi", BigDecimal.valueOf(30_000), LocalDate.of(2015, 1, 1)), 9,
-                new Cat("catBreed4", "jkl", BigDecimal.valueOf(40_000), LocalDate.of(2021, 1, 1)), 3,
-                new Cat("catBreed5", "mno", BigDecimal.valueOf(50_000), LocalDate.of(2022, 1, 1)), 2
-        );
-        assertEquals(expected, animalsRepository.findOlderAnimal(-1));
+        assertThrows(IllegalAgeException.class, () -> animalsRepository.findOlderAnimal(-1));
     }
 
     @Test
@@ -133,7 +128,7 @@ public class AnimalRepositoryTest {
     @Test
     @DisplayName("Проверка дубликатов, когда их нет")
     void testFindDuplicateEmptyResult() {
-        assertEquals(new HashMap<>(), animalsRepository.findDuplicate());
+        assertThrows(EmptyResultException.class, () -> animalsRepository.findDuplicate());
     }
 
     @Test
@@ -169,7 +164,7 @@ public class AnimalRepositoryTest {
     @Test
     @DisplayName("Нахождение взрослых и дорогих животных в случае, когда все взрослые животные дешевые")
     void testFindOldAndExpensiveEdgeCase1() {
-        assertEquals(new ArrayList<>(), animalsRepository.findOldAndExpensive());
+        assertThrows(EmptyResultException.class, () -> animalsRepository.findOldAndExpensive());
     }
 
     @Test
@@ -188,17 +183,32 @@ public class AnimalRepositoryTest {
         Mockito.when(createAnimalService.createAnimals(10)).thenReturn(Map.of(AnimalType.CAT.toString(), animals));
         animalsRepository.initData();
 
-        assertEquals(new ArrayList<>(), animalsRepository.findOldAndExpensive());
+        assertThrows(EmptyResultException.class, () -> animalsRepository.findOldAndExpensive());
     }
 
     @Test
     @DisplayName("Нахождение животных с наименьшей стоимостью")
-    void testFindMinCostAnimals() {
+    void testFindMinCostAnimals() throws InvalidListSizeException {
         List<AbstractAnimal> expected = List.of(
                 new Cat("catBreed3", "ghi", BigDecimal.valueOf(30_000), LocalDate.of(2015, 1, 1)),
                 new Cat("catBreed2", "def", BigDecimal.valueOf(20_000), LocalDate.of(2020, 1, 1)),
                 new Cat("catBreed1", "abc", BigDecimal.valueOf(10_000), LocalDate.of(2024, 1, 1))
         );
         assertEquals(expected, animalsRepository.findMinCostAnimals());
+    }
+
+    @Test
+    @DisplayName("Нахождение животных с наименьшей стоимостью и проверка исключения при некорректном размере списка")
+    void testFindMinCostAnimalsWithThrownException() {
+        List<AbstractAnimal> animals = List.of(
+                new Cat("catBreed1", "abc", BigDecimal.valueOf(10_000), LocalDate.of(2024, 1, 1)),
+                new Cat("catBreed2", "def", BigDecimal.valueOf(20_000), LocalDate.of(2023, 1, 1))
+        );
+
+        // Здесь пришлось это оставить из-за того, что в initData() генерирующаяся коллекция не подходит для теста.
+        Mockito.when(createAnimalService.createAnimals(10)).thenReturn(Map.of(AnimalType.CAT.toString(), animals));
+        animalsRepository.initData();
+
+        assertThrows(InvalidListSizeException.class, () -> animalsRepository.findMinCostAnimals());
     }
 }
