@@ -148,7 +148,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return animalsList.stream()
                 .sorted(Comparator.comparing(AbstractAnimal::getCost))
                 .limit(3)
-                .sorted((first, second) -> -first.getName().compareTo(second.getName()))
+                .sorted(Comparator.comparing(AbstractAnimal::getName).reversed())
                 .collect(Collectors.toList());
     }
 }
