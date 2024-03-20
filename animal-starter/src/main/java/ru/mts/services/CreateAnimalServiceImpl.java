@@ -1,6 +1,7 @@
 package ru.mts.services;
 
 import ru.mts.config.StarterConfigurationProperties;
+import ru.mts.exceptions.IllegalCreationAmountException;
 import ru.mts.models.enums.AnimalType;
 import ru.mts.models.templates.AbstractAnimal;
 import ru.mts.models.factories.AnimalFactory;
@@ -41,7 +42,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     @Override
     public Map<String, List<AbstractAnimal>> createAnimals(int amount) throws IllegalArgumentException {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Check data for correctness.");
+            throw new IllegalCreationAmountException("invalid amount of animals");
         }
 
         List<String> names = starterConfigurationProperties.getCatNames();

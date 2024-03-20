@@ -1,6 +1,10 @@
 package ru.mts.services;
 
 import org.springframework.stereotype.Repository;
+import ru.mts.exceptions.EmptyResultException;
+import ru.mts.exceptions.IllegalAgeException;
+import ru.mts.exceptions.IllegalBirthDateException;
+import ru.mts.exceptions.InvalidListSizeException;
 import ru.mts.models.enums.AnimalType;
 import ru.mts.models.templates.AbstractAnimal;
 
@@ -37,18 +41,31 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     @Override
     public int getAnimalAge(AbstractAnimal animal) {
+        if (animal.getBirthDate() == null) {
+            throw new IllegalBirthDateException("Birth date is not set");
+        }
         return Period.between(animal.getBirthDate(), LocalDate.now()).getYears();
     }
 
     @Override
     public Map<String, LocalDate> findLeapYearNames() {
-        return animalsList.stream()
+        Map<String, LocalDate> result = animalsList.stream()
                 .filter(animal -> animal.getBirthDate().isLeapYear())
                 .collect(Collectors.toMap(animal -> animal.getClass().getSimpleName() + " " + animal.getName(), AbstractAnimal::getBirthDate));
+
+        if (result.isEmpty()) {
+            throw new EmptyResultException("empty result");
+        }
+
+        return result;
     }
 
     @Override
     public Map<AbstractAnimal, Integer> findOlderAnimal(int n) {
+        if (n < 0) {
+            throw new IllegalAgeException("age must be > 0");
+        }
+
         Map<AbstractAnimal, Integer> result = animalsList.stream()
                 .filter(animal -> getAnimalAge(animal) > n)
                 .collect(Collectors.toMap(entry -> entry, this::getAnimalAge));
@@ -65,13 +82,19 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     @Override
     public Map<String, List<AbstractAnimal>> findDuplicate() {
-        return animalsList.stream()
+        Map<String, List<AbstractAnimal>> result = animalsList.stream()
                 .collect(Collectors.groupingBy(Function.identity(),
                         Collectors.counting()))
                 .entrySet().stream()
                 .filter(entry -> entry.getValue() > 1)
                 .map(entry -> Map.entry(entry.getKey().getClass().getSimpleName(), entry.getKey()))
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+        if (result.isEmpty()) {
+            throw new EmptyResultException("empty result");
+        }
+
+        return result;
     }
 
     @Override
@@ -103,14 +126,25 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .mapToDouble(animal -> animal.getCost().intValue())
                 .average()
                 .orElse(-1);
-        return animalsList.stream()
+
+        List<AbstractAnimal> result = animalsList.stream()
                 .filter(animal -> getAnimalAge(animal) > 5 && animal.getCost().doubleValue() > avgCost)
                 .sorted(Comparator.comparing(AbstractAnimal::getBirthDate))
-                .collect(Collectors.toList());
+                .toList();
+
+        if (result.isEmpty()) {
+            throw new EmptyResultException("empty result");
+        }
+
+        return result;
     }
 
     @Override
-    public List<AbstractAnimal> findMinCostAnimals() {
+    public List<AbstractAnimal> findMinCostAnimals() throws InvalidListSizeException {
+        if (animalsList.size() < 3) {
+            throw new InvalidListSizeException("list size must be > 3");
+        }
+
         return animalsList.stream()
                 .sorted(Comparator.comparing(AbstractAnimal::getCost))
                 .limit(3)

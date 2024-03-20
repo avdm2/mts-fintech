@@ -1,5 +1,6 @@
 package ru.mts.services;
 
+import ru.mts.exceptions.InvalidListSizeException;
 import ru.mts.models.templates.AbstractAnimal;
 
 import java.time.LocalDate;
@@ -59,5 +60,5 @@ public interface AnimalsRepository {
      * Метод, находящий трех самых дешевых животных.
      * @return Список животных согласно требованию, отсортированный по именам в обратном алфавитном порядке.
      */
-    List<AbstractAnimal> findMinCostAnimals();
+    List<AbstractAnimal> findMinCostAnimals() throws InvalidListSizeException;
 }
